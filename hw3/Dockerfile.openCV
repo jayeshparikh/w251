@@ -21,6 +21,14 @@ RUN dpkg -i *.deb
 
 RUN apt install -y libcanberra-gtk-module libcanberra-gtk3-module libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 
+RUN apt install -y python-pip
+#RUN apt install python3-pip
+
+RUN  pip install paho-mqtt
+#RUN  pip3 install paho-mqtt
+
+#RUN ls -l /usr/share/opencv4
+
 #RUN apt install python3.6-dev python3-numpy
 
 RUN rm -f /tmp/*.deb
@@ -30,13 +38,15 @@ RUN rm -f /tmp/*.deb
 
 #creating homework3 folder in container (linux machine)
 RUN mkdir /home/jjparikh
-RUN mkdir /home/jjparikh/hw3
+RUN mkdir /home/jjparikh/w251
+RUN mkdir /home/jjparikh/w251/hw3
 
 #copying Capture.py from local directory to container's hw3 folder
 
-COPY Capture.py /home/jjparikh/hw3/Capture.py
+COPY Capture.py /home/jjparikh/w251/hw3/Capture.py
+COPY haarcascade_frontalface_default.xml /home/jjparikh/w251/hw3/haarcascade_frontalface_default.xml
 
 #running Capture.py in container
 
-CMD python /home/jjparikh/hw3/Capture.py
+CMD python /home/jjparikh/w251/hw3/Capture.py
 

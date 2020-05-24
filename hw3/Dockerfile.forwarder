@@ -1,0 +1,15 @@
+from alpine:3.7
+
+RUN apk update && apk add mosquitto-clients
+
+RUN apk add py-pip
+RUN pip install paho-mqtt
+
+#creating homework3 folder in container (linux machine)
+RUN mkdir /home/jjparikh
+RUN mkdir /home/jjparikh/w251
+RUN mkdir /home/jjparikh/w251/hw3
+
+COPY forwarder.py /home/jjparikh/w251/hw3
+
+CMD python /home/jjparikh/w251/hw3/forwarder.py
