@@ -6,7 +6,7 @@ def on_publish(mosq, userdata, mid):
   # Disconnect after our message has been sent.
   mqtt.disconnect()
 
-exit=False
+#exit=False
 #faceCascade = cv2.CascadeClassifier('/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml')
 faceCascade = cv2.CascadeClassifier('/home/jjparikh/w251/hw3/haarcascade_frontalface_default.xml')
 
@@ -30,7 +30,7 @@ while True:
                gray,
                scaleFactor=1.3,
                minNeighbors=5,
-               minSize=(30, 30)
+               minSize=(50, 50)
             )
 
     # Draw a rectangle around the faces
@@ -39,32 +39,28 @@ while True:
         face = gray[y: y + h, x: x + w] 
         cv2.imwrite(str(w) + str(h) + '_faces.jpg', face)
 
-        # Display the resulting frame
-        cv2.imshow('Video', gray)
-
         rc,jpg = cv2.imencode('.jpg', face)
         msg = jpg.tobytes()
 
         # Specifying a client id here could lead to collisions if you have multiple
         # clients sending. Either generate a random id, or use:
-        #client = mosquitto.Mosquitto()
+        # client = mosquitto.Mosquitto()
         client = mqtt.Client("image-send")
         client.on_publish = on_publish
-        client.connect("0.0.0.0")
-
-        #f = open("./face.jpg")
-        #imagestring = f.read()
-        #byteArray = bytes(imagestring)
+        client.connect("10.0.0.190")
 
         client.publish("photo", msg ,0)
 
-        k = cv2.waitKey(1)
-        if k%256 == 27:
-           # ESC pressed
-           print("Escape hit, closing...")
-           cv2.imwrite("face.jpg", face)
-           exit=True
-           break
+    # Display the resulting frame
+    cv2.imshow('Video', gray)
+
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+       # 'q' pressed
+       print("q hit, closing...")
+       cv2.imwrite("face.jpg", gray)
+       #exit=True
+       break
        
        # elif k%256 == 32:
        #    SPACE pressed
@@ -87,8 +83,8 @@ while True:
            # and will return after we call disconnect() above.
            # client.loop_forevere)
 
-    if exit:
-       break
+    #if exit:
+    #   break
 
 # When everything is done, release the capture
 video_capture.release()

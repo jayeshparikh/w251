@@ -1,7 +1,7 @@
 import paho.mqtt.client as mqtt
 
 
-LOCAL_MQTT_HOST="mosquitto"
+LOCAL_MQTT_HOST="10.0.0.190"
 LOCAL_MQTT_PORT=1883
 LOCAL_MQTT_TOPIC="photo"
 REMOTE_MQTT_TOPIC="photo"
