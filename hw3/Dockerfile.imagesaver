@@ -1,0 +1,26 @@
+FROM ubuntu:18.04
+
+RUN apt update 
+RUN apt install -y build-essential libcurl4-openssl-dev libxml2-dev mime-support
+RUN apt install -y mosquitto-clients
+
+RUN apt install -y python-pip
+RUN pip install paho-mqtt
+
+# RUN apt-get install -y nvidia-modprobe
+RUN apt install -y s3fs
+
+#creating homework3 folder in container (linux machine)
+RUN mkdir /root/w251
+RUN mkdir /root/w251/hw3
+
+# copy credentials
+COPY ./.cos_creds /root/w251/hw3/.cos_creds
+RUN chmod 600 /root/w251/hw3/.cos_creds
+
+RUN mkdir /mnt/hw3cos
+RUN s3fs p100-os-bucket1 /mnt/hw3cos -o passwd_file=/root/w251/hw3/.cos_creds -o sigv2 -o use_path_request_style -o url=https://s3.us-east.objectstorage.softlayer.net
+
+COPY imagesaver.py /root/w251/hw3
+
+CMD python /root/w251/hw3/imagesaver.py

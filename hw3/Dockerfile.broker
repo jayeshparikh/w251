@@ -1,0 +1,7 @@
+from alpine:3.7
+
+RUN apk update && apk add mosquitto
+
+CMD docker inspect mosquitto
+CMD /usr/sbin/mosquitto
+
